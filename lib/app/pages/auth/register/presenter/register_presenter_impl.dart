@@ -25,8 +25,9 @@ class RegisterPresenterImpl implements RegisterPresenter {
       password: password,
       password_confirmation: password_confirmation,
     );
-    await authRepository.register(registerUserModel);
+
     try {
+      await authRepository.register(registerUserModel);
       _view.registerSuccess();
     } catch (error, stackTrace) {
       log(

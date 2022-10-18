@@ -31,11 +31,11 @@ class AuthRepositoryImpl implements AuthRepository {
             '/api/register',
             data: registerUserModel.toMap(),
           );
-    } on DioError catch (error, stack_trace) {
+    } on DioError catch (error, s) {
       log(
         'Erro ao registrar usuário',
         error: error,
-        stackTrace: stack_trace,
+        stackTrace: s,
       );
       throw RepositoryException(message: 'Erro ao registrar usuário');
     }
