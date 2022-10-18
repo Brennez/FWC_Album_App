@@ -34,7 +34,7 @@ class ThemeConfig {
       fillColor: Colors.white,
       filled: true,
       isDense: true,
-      contentPadding: EdgeInsets.all(13),
+      contentPadding: const EdgeInsets.all(13),
       labelStyle: TextStyles.i.labelTextField,
       border: _defaultInputBorder,
       enabledBorder: _defaultInputBorder,

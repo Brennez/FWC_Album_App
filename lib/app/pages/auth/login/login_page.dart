@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fwc_album_app/app/core/ui/styles/button_styles.dart';
 import 'package:fwc_album_app/app/core/ui/styles/colors_app.dart';
@@ -16,6 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: ColorsApp.i.primary,
       body: Form(
         child: Container(
@@ -84,19 +86,25 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(children: [
                   const Spacer(),
                   Text.rich(
-                      style:
-                          context.textStyles.textSecondaryFontMedium.copyWith(
-                        color: Colors.white,
-                      ),
-                      TextSpan(text: 'Não possui uma conta? ', children: [
+                    style: context.textStyles.textSecondaryFontMedium.copyWith(
+                      color: Colors.white,
+                    ),
+                    TextSpan(
+                      text: 'Não possui uma conta? ',
+                      children: [
                         TextSpan(
-                            onEnter: (context) {},
-                            text: 'Cadastre-se',
-                            style: context.textStyles.textSecondaryFontMedium
-                                .copyWith(
-                              color: context.colors.yellow,
-                            )),
-                      ]))
+                          text: 'Cadastre-se',
+                          style: context.textStyles.textSecondaryFontMedium
+                              .copyWith(
+                            color: context.colors.yellow,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => Navigator.of(context)
+                                .pushNamed('/auth/register'),
+                        ),
+                      ],
+                    ),
+                  )
                 ]),
               )
             ],
