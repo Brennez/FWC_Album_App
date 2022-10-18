@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fwc_album_app/app/core/ui/styles/text_styles.dart';
 import 'package:fwc_album_app/app/core/ui/widgets/button.dart';
 import 'package:fwc_album_app/app/pages/auth/register/presenter/register_presenter.dart';
+import 'package:fwc_album_app/app/pages/auth/register/view/register_view_impl.dart';
 import 'package:validatorless/validatorless.dart';
 
 class ResgisterPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class ResgisterPage extends StatefulWidget {
   State<ResgisterPage> createState() => _ResgisterPageState();
 }
 
-class _ResgisterPageState extends State<ResgisterPage> {
+class _ResgisterPageState extends RegisterViewImpl {
   final formKey = GlobalKey<FormState>();
   final nameEC = TextEditingController();
   final emailEC = TextEditingController();
@@ -97,6 +98,7 @@ class _ResgisterPageState extends State<ResgisterPage> {
                       decoration: const InputDecoration(
                         label: Text('Senha *'),
                       ),
+                      obscureText: true,
                       validator: Validatorless.multiple([
                         Validatorless.required('Campo obrigatório!'),
                         Validatorless.min(
@@ -110,8 +112,11 @@ class _ResgisterPageState extends State<ResgisterPage> {
                       decoration: const InputDecoration(
                         label: Text('Confirmar senha *'),
                       ),
+                      obscureText: true,
                       validator: Validatorless.multiple([
                         Validatorless.required('Campo obrigatório!'),
+                        Validatorless.min(
+                            6, "A senha deve conter pelo menos 6 caracteres!"),
                         Validatorless.compare(
                             passwordEC, 'senha digitada não é igual'),
                       ]),
