@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fwc_album_app/app/core/ui/styles/colors_app.dart';
 
@@ -52,6 +51,11 @@ class TextStyles {
   TextStyle get labelTextField =>
       TextStyles.i.textSecondaryFontRegular.copyWith(
         color: ColorsApp.i.greyDart,
+      );
+
+  TextStyle get titleWhite => textPrimaryFontBold.copyWith(
+        color: Colors.white,
+        fontSize: 22,
       );
 }
 
