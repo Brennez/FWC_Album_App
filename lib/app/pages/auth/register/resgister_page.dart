@@ -133,6 +133,7 @@ class _ResgisterPageState extends RegisterViewImpl {
                 onPressed: () {
                   final formValid = formKey.currentState?.validate() ?? false;
                   if (formValid) {
+                    showLoader();
                     widget.presenter.register(
                       name: nameEC.text,
                       email: emailEC.text,
