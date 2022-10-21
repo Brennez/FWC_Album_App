@@ -3,12 +3,20 @@ import 'package:fwc_album_app/app/core/ui/styles/button_styles.dart';
 import 'package:fwc_album_app/app/core/ui/styles/colors_app.dart';
 import 'package:fwc_album_app/app/core/ui/styles/text_styles.dart';
 import 'package:fwc_album_app/app/core/ui/widgets/button.dart';
+import 'package:fwc_album_app/app/pages/home/presenter/home_presenter.dart';
+import 'package:fwc_album_app/app/pages/home/view/home_view_impl.dart';
 import 'package:fwc_album_app/app/pages/home/widgets/status_tile.dart';
 import 'package:fwc_album_app/app/pages/home/widgets/sticker_percent.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget {
+  final HomePresenter presenter;
+  const HomePage({super.key, required this.presenter});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends HomeViewImpl {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +26,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: context.colors.primary,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => widget.presenter.logout(),
             icon: const Icon(
               Icons.logout,
               color: Colors.white,
@@ -51,12 +59,14 @@ class HomePage extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      StickerPercent(percent: 60),
+                      StickerPercent(
+                        percent: user?.totalCompletePercent ?? 0,
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
                       Text(
-                        '45 Figurinhas',
+                        '${user?.totalStickers ?? 0}',
                         style: context.textStyles.titleWhite,
                       ),
                       const SizedBox(
@@ -65,7 +75,7 @@ class HomePage extends StatelessWidget {
                       StatusTile(
                         icon: Image.asset('assets/images/all_icon.png'),
                         title: "Todas",
-                        number: 46,
+                        number: user?.totalAlbum ?? 0,
                       ),
                       const SizedBox(
                         height: 20,
@@ -73,22 +83,24 @@ class HomePage extends StatelessWidget {
                       StatusTile(
                         icon: Image.asset('assets/images/missing_icon.png'),
                         title: "Faltando",
-                        number: 500,
+                        number: user?.totalComplete ?? 0,
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       StatusTile(
                         icon: Image.asset('assets/images/repeated_icon.png'),
-                        title: "Faltando",
-                        number: 35,
+                        title: "Repetidas",
+                        number: user?.totalDuplicates ?? 0,
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       Button(
                           width: MediaQuery.of(context).size.width * .90,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/my-stickers');
+                          },
                           outline: true,
                           style: context.buttonStyles.yellowOutlineButton,
                           labelStyle: context
