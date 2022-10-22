@@ -33,9 +33,10 @@ class _MyStickerPageState extends MyStickersViewImpl {
           SliverList(
               delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return StickerGroup();
+              final group = album[index];
+              return StickerGroup(group: group);
             },
-            childCount: 10,
+            childCount: album.length,
           ))
         ],
       ),
