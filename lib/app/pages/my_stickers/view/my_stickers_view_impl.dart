@@ -12,11 +12,14 @@ abstract class MyStickersViewImpl extends State<MyStickerPage>
   //
 
   var album = <GroupStickers>[];
+  var statusFilter = 'all';
+  var countries = <String, String>{};
 
   @override
   void initState() {
     widget.presenter.view = this;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      showLoader();
       widget.presenter.getMyAlbum();
     });
     super.initState();
@@ -27,6 +30,26 @@ abstract class MyStickersViewImpl extends State<MyStickerPage>
 
   @override
   void loadedPage(List<GroupStickers> album) {
+    hideLoader();
+    setState(() {
+      this.album = album;
+      // Populando o mapa com as informações da API
+      countries = {
+        for (var country in album) country.countryCode: country.countryName,
+      };
+    });
+  }
+
+  @override
+  void updateStatusFilter(String status) {
+    setState(() {
+      this.statusFilter = status;
+    });
+  }
+
+  @override
+  void updateAlbum(List<GroupStickers> album) {
+    hideLoader();
     setState(() {
       this.album = album;
     });

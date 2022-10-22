@@ -16,6 +16,7 @@ class HomePresenterImpl implements HomePresenter {
   Future<void> getUserData() async {
     // retorna os dados do usuário
     try {
+      _view.showLoader();
       final user = await userRepository.getMe();
       _view.updateUser(user);
     } catch (e) {

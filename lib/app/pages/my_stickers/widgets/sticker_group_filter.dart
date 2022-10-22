@@ -1,35 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_awesome_select/flutter_awesome_select.dart';
-import 'package:fwc_album_app/app/core/ui/styles/colors_app.dart';
+import 'package:flutter_getit/flutter_getit.dart';
 import 'package:fwc_album_app/app/core/ui/styles/text_styles.dart';
 
+import '../presenter/my_stickers_presenter.dart';
+
 class StickerGroupFilter extends StatefulWidget {
-  const StickerGroupFilter({Key? key}) : super(key: key);
+  //
+  final Map<String, String> countries;
+
+  const StickerGroupFilter({
+    Key? key,
+    required this.countries,
+  }) : super(key: key);
 
   @override
   State<StickerGroupFilter> createState() => _StickerGroupFilterState();
 }
 
 class _StickerGroupFilterState extends State<StickerGroupFilter> {
+  List<String>? selected;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8),
-      child: SmartSelect.multiple(
+      padding: const EdgeInsets.all(8),
+      child: SmartSelect<String>.multiple(
         title: 'Filtro',
         tileBuilder: (context, state) {
           return InkWell(
             onTap: () => state.showModal(),
-            child: _stickerGroupStyle(
+            child: _stickerGroupTile(
+                clearCallback: () {
+                  setState(() {
+                    selected = null;
+                    context.get<MyStickersPresenter>().countryFilter(selected);
+                  });
+                },
                 label: state.selected.title?.join(', ') ?? 'filtro'),
           );
         },
-        onChange: (value) {},
+        selectedValue: selected ?? [],
+        onChange: (selectedValue) {
+          setState(() {
+            selected = selectedValue.value;
+          });
+          context.get<MyStickersPresenter>().countryFilter(selected);
+        },
         choiceItems: S2Choice.listFrom(
-          source: [
-            {'value': 'BRA', 'title': 'Brasil'},
-            {'value': 'FWC', 'title': 'Fifa World Cup'},
-          ],
+          source: widget.countries.entries
+              .map((e) => {'value': e.key, 'title': e.value})
+              .toList(),
           value: ((index, item) => item['value'] ?? ''),
           title: (((index, item) => item['title'] ?? '')),
         ),
@@ -43,11 +64,13 @@ class _StickerGroupFilterState extends State<StickerGroupFilter> {
   }
 }
 
-class _stickerGroupStyle extends StatelessWidget {
+class _stickerGroupTile extends StatelessWidget {
   final String label;
-  const _stickerGroupStyle({
+  final VoidCallback clearCallback;
+  const _stickerGroupTile({
     Key? key,
     required this.label,
+    required this.clearCallback,
   }) : super(key: key);
 
   @override
@@ -56,23 +79,31 @@ class _stickerGroupStyle extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Color(0XFFF0F0F0),
+        color: const Color(0XFFF0F0F0),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Row(
           children: [
-            Icon(Icons.filter_list),
+            const Icon(Icons.filter_list),
             const SizedBox(
               width: 5,
             ),
-            Text(
-              label,
-              style: context.textStyles.textSecondaryFontRegular.copyWith(
-                fontSize: 11,
+            Expanded(
+              child: Text(
+                label,
+                style: context.textStyles.textSecondaryFontRegular.copyWith(
+                  fontSize: 11,
+                ),
               ),
             ),
+            InkWell(
+              child: IconButton(
+                onPressed: clearCallback,
+                icon: const Icon(Icons.clear),
+              ),
+            )
           ],
         ),
       ),
