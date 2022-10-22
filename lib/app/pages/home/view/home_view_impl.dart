@@ -38,7 +38,8 @@ abstract class HomeViewImpl extends State<HomePage>
   @override
   void updateUser(UserModel user) {
     hideLoader();
-    this.user = user;
-    setState(() {}); //GAMBIARRA
+    setState(() {
+      this.user = user;
+    });
   }
 }
